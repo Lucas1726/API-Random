@@ -1,0 +1,244 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "API Random",
+        "description": "Gerar números aleatórios dentro de um intervalo específico"
+    },
+    "host": "https://ap2uni9.cafuzeira.repl.co",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/usuarios": {
+            "get": {
+                "summary": "Obter lista de usuários",
+                "description": "Lista de usuários",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Esta rota permite obter a lista de usuários cadastrados.",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/token": {
+            "get": {
+                "summary": "Obter lista de usuários após o Token ser gerado",
+                "description": "Lista de usuários com Token",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Esta rota permite obter a lista de usuários cadastrados e o Token gerado no seu login",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/cadastro": {
+            "post": {
+                "summary": "Cadastrar um novo usuário",
+                "description": "Objeto do novo usuário",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "type": "object",
+                        "description": "Esta rota permite cadastrar novos usuários na lista usuários.",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorno esperado em caso de sucesso",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "retorno": {
+                                    "type": "string",
+                                    "example": "Usuário cadastrado com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mensagem": {
+                                    "type": "string",
+                                    "example": "Nome de usuário já em uso. Escolha outro nome de usuário."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Autenticar usuário",
+                "description": "Credenciais de login",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Esta rota permite que os usuários façam login e recebam um token de acesso JWT válido",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Autenticação bem-sucedida",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "retorno": {
+                                    "type": "string",
+                                    "example": "Accesso ao Token"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Credenciais inválidas",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mensagem": {
+                                    "type": "string",
+                                    "example": "Credenciais inválidas"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/random": {
+            "post": {
+                "summary": "Gerar números aleatórios",
+                "description": "Gera números aleatórios dentro de um intervalo específico. Requer autenticação usando um token JWT válido.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "minimo",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "maximo",
+                        "required": true,
+                        "type": "integer",
+                        "example": 100
+                    },
+                    {
+                        "in": "query",
+                        "name": "quantidade",
+                        "required": true,
+                        "type": "integer",
+                        "example": 10
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string",
+                        "description": "Token JWT de autenticação válido. Deve ser enviado no cabeçalho da requisição com o formato 'Bearer <access_token>'.",
+                        "required": true,
+                        "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna uma lista de números aleatórios dentro do intervalo especificado.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "numeros": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado. O token JWT não é válido ou está ausente.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mensagem": {
+                                    "type": "string",
+                                    "example": "Token JWT inválido ou ausente."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cabeçalho de autorização incorreto. Autorização esperada: Portador <JWT>.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mensagem": {
+                                    "type": "string",
+                                    "example": "Cabeçalho de autorização inválido. Use: Portador <JWT>."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
